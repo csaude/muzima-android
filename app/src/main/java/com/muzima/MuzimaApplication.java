@@ -203,8 +203,11 @@ public class MuzimaApplication extends MultiDexApplication {
     }
     private byte[] getDatabasePassKey() throws NoSuchAlgorithmException {
         String keyString = MuzimaPreferences.getStringPreference(this, "databasePassKey", StringUtils.EMPTY);
-        if(!StringUtils.isEmpty(keyString))
-            return Base64.decode(keyString, Base64.NO_WRAP);
+        if (!StringUtils.isEmpty(keyString)) {
+            byte[] passkey = Base64.decode(keyString, Base64.NO_WRAP);
+            Log.d("DatabasePassKey", "Passkey (Base64): " + keyString);
+            return passkey;
+        }
 
         SecureRandom random = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -213,10 +216,13 @@ public class MuzimaApplication extends MultiDexApplication {
         byte[] result = new byte[32];
         random.nextBytes(result);
 
-        MuzimaPreferences.setStringPreference(this, "databasePassKey", Base64.encodeToString(result, Base64.NO_WRAP));
+        String encodedKey = Base64.encodeToString(result, Base64.NO_WRAP);
+        MuzimaPreferences.setStringPreference(this, "databasePassKey", encodedKey);
 
+        Log.d("DatabasePassKey", "Generated Passkey (Base64): " + encodedKey);
         return result;
     }
+
 
     public void checkAndSetLocaleToDeviceLocaleIFDisclaimerNotAccepted() {
         String disclaimerKey = getResources().getString(R.string.preference_disclaimer);

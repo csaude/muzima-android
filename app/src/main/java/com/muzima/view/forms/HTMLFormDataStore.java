@@ -67,6 +67,7 @@ import net.minidev.json.JSONValue;
 import org.json.JSONException;
 
 import com.muzima.controller.EncounterController;
+import com.muzima.utils.Utils;
 import com.muzima.view.MainDashboardActivity;
 import com.muzima.view.patients.UpdatePatientTagsIntent;
 
@@ -1016,6 +1017,7 @@ class HTMLFormDataStore {
         List<Encounter> encounters = new ArrayList<>();
         try {
             encounters = encounterController.getEncountersByPatientUuid(patientUuid);
+            if(!Utils.listHasElements((ArrayList<?>) encounters)) return null;
             for (Encounter enc : encounters) {
                 if (enc.getEncounterType().getEncounterTypeName().equals(encounterType)) {
                     observations.addAll(observationController.getObservationsByEncounterId(enc.getEncounterId()));

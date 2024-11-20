@@ -13,7 +13,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-    <mz.org.csaude.muzima.view.custom.MuzimaRecyclerView
+    <com.muzima.view.custom.MuzimaRecyclerView
             android:id="@+id/recycler_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

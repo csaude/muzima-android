@@ -17,16 +17,16 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true">
 
-    <mz.org.csaude.muzima.utils.barcode.CameraSourcePreview
+    <com.muzima.utils.barcode.CameraSourcePreview
         android:id="@+id/preview"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <mz.org.csaude.muzima.utils.barcode.GraphicOverlay
+        <com.muzima.utils.barcode.GraphicOverlay
             android:id="@+id/graphicOverlay"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-    </mz.org.csaude.muzima.utils.barcode.CameraSourcePreview>
+    </com.muzima.utils.barcode.CameraSourcePreview>
 
 </LinearLayout>

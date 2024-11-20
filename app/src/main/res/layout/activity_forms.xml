@@ -44,7 +44,7 @@
 
             </LinearLayout>
         </com.google.android.material.appbar.AppBarLayout>
-        <mz.org.csaude.muzima.view.custom.PagerSlidingTabStrip
+        <com.muzima.view.custom.PagerSlidingTabStrip
             android:id="@+id/pager_indicator"
             android:layout_width="match_parent"
             android:layout_height="@dimen/pager_indicator_height"
