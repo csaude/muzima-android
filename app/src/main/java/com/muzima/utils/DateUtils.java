@@ -19,6 +19,7 @@ import java.time.Year;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,6 +44,26 @@ public class DateUtils {
             return date;
         } catch (ParseException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Removes the time from a given Date object and returns the date-only value.
+     *
+     * @param date the Date object to process
+     * @return a Date object representing only the date without time, or null if the input is null
+     */
+    public static Date removeTimeFromDate(Date date) {
+        if (date == null) {
+            return null;
+        }
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            sdf.setTimeZone(TimeZone.getTimeZone("UTC")); // Use UTC to avoid timezone shifts
+            String dateOnlyString = sdf.format(date);
+            return sdf.parse(dateOnlyString);
+        } catch (Exception e) {
+            throw new RuntimeException("Error while removing time from date", e);
         }
     }
 

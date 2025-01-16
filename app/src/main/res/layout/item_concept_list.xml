@@ -9,7 +9,7 @@
   ~ this code in a for-profit venture, please contact the copyright holder.
   -->
 
-<mz.org.csaude.muzima.view.custom.CheckedRelativeLayout
+<com.muzima.view.custom.CheckedRelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         android:background="?attr/activatedBackgroundIndicator"
         android:checkable="true">
 
-    <mz.org.csaude.muzima.view.custom.CheckedLinearLayout
+    <com.muzima.view.custom.CheckedLinearLayout
             android:id="@+id/concept_name_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -29,5 +29,5 @@
                 style="@style/ListViewSelectableText"
                 android:checkMark="@null"/>
 
-    </mz.org.csaude.muzima.view.custom.CheckedLinearLayout>
-</mz.org.csaude.muzima.view.custom.CheckedRelativeLayout>
+    </com.muzima.view.custom.CheckedLinearLayout>
+</com.muzima.view.custom.CheckedRelativeLayout>

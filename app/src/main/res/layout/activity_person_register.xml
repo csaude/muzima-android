@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:orientation="vertical"
     style="@style/AppBaseTheme.Light.NoActionBar"
-    tools:context="mz.org.csaude.muzima.view.person.PersonRegisterActivity">
+    tools:context="com.muzima.view.person.PersonRegisterActivity">
 
     <include layout="@layout/app_bar" />
     <LinearLayout

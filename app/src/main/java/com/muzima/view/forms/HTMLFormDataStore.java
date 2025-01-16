@@ -1520,29 +1520,24 @@ class HTMLFormDataStore {
         try {
             List<DerivedObservation> derivedObservations = new ArrayList<>();
             derivedObservations.addAll(getInterventionsDerivedObs(patientUuid));
-            Collections.sort(derivedObservations, derivedObservationDateTimeComparator);
 
             List<CohortMember> cohortMembers = cohortController.getCohortMembershipByPatientUuid(patientUuid);
             Collections.sort(cohortMembers, cohortMemberDateTimeComparator);
-            CohortMember cohortMember = cohortMembers.get(0);
             Set<String> derivedObs = new HashSet<String>(0);
             for (DerivedObservation derivedObservation : derivedObservations) {
-                int value = derivedObservation.getDateCreated().compareTo(cohortMember.getMembershipDate());
-                if (value == 0 || value == 1) {
-                    if (derivedObs.isEmpty() && derivedObservationsList.isEmpty()) {
+                if (derivedObs.isEmpty() && derivedObservationsList.isEmpty()) {
+                    if (notElementOfTheList(derivedObservationsList, derivedObservation)) {
+                        derivedObservationsList.add(derivedObservation);
+                        derivedObs.add(derivedObservation.getValueText());
+                        if (isPreventiveObs(derivedObservation)) {
+                            break;
+                        }
+                    }
+                } else if (!derivedObs.isEmpty() && !derivedObs.contains(derivedObservation.getValueText())) {
+                    if(isPatientFromList2(derivedObservationsList) && !isPreventiveObs(derivedObservation)){
                         if (notElementOfTheList(derivedObservationsList, derivedObservation)) {
                             derivedObservationsList.add(derivedObservation);
                             derivedObs.add(derivedObservation.getValueText());
-                            if (isPreventiveObs(derivedObservation)) {
-                                break;
-                            }
-                        }
-                    } else if (!derivedObs.isEmpty() && !derivedObs.contains(derivedObservation.getValueText())) {
-                        if(isPatientFromList2(derivedObservationsList) && !isPreventiveObs(derivedObservation)){
-                            if (notElementOfTheList(derivedObservationsList, derivedObservation)) {
-                                derivedObservationsList.add(derivedObservation);
-                                derivedObs.add(derivedObservation.getValueText());
-                            }
                         }
                     }
                 }
