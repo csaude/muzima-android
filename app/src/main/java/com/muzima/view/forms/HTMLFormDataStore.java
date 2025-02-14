@@ -67,6 +67,7 @@ import net.minidev.json.JSONValue;
 import org.json.JSONException;
 
 import com.muzima.controller.EncounterController;
+import com.muzima.utils.Utils;
 import com.muzima.view.MainDashboardActivity;
 import com.muzima.view.patients.UpdatePatientTagsIntent;
 
@@ -380,7 +381,7 @@ class HTMLFormDataStore {
         final String patientUuid = formData.getPatientUuid();
         boolean encounterDetailsValidityStatus = true;
 
-        String errorMsg = isValidForm(jsonPayload, status, true, formData);
+        String errorMsg = null;//isValidForm(jsonPayload, status, true, formData);
         if (!StringUtils.isEmpty(errorMsg)) {
             Toast.makeText(formWebViewActivity, errorMsg, Toast.LENGTH_LONG).show();
             Log.e(getClass().getSimpleName(), errorMsg);
@@ -1085,7 +1086,7 @@ class HTMLFormDataStore {
             }
             json.put("valueNumeric", obs.getValueNumeric());
             json.put("valueText", obs.getValueText());
-            json.put("encounterId", obs.getEncounter().getEncounterId());
+            json.put("encounterId", obs.getEncounter() != null ? obs.getEncounter().getEncounterId() : null);
             json.put("uuid", obs.getObsUuid());
             json.put("valueComplex", obs.getValueComplex());
             json.put("valueDatetime", convertedvalueDateTime);
@@ -1625,6 +1626,9 @@ class HTMLFormDataStore {
 
             if (lastTriangulation != null) {
                 List<Observation> lastAttempts = observationController.getObservationsByPatientuuidAndConceptId(patientUuid, conceptId);
+                if (!Utils.listHasElements((ArrayList<?>) lastAttempts)) {
+                    return null;
+                }
                 Collections.sort(lastAttempts, observationDateTimeComparator);
                 Observation lastAttempt = lastAttempts.get(0);
                 if (lastAttempt.getObservationDatetime().after(lastTriangulation.getObservationDatetime())) {
