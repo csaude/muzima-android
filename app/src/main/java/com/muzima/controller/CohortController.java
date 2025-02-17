@@ -27,6 +27,7 @@ import com.muzima.service.SntpService;
 import com.muzima.util.JsonUtils;
 import com.muzima.utils.MuzimaPreferences;
 import com.muzima.utils.StringUtils;
+import com.muzima.utils.Utils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -437,7 +438,7 @@ public class CohortController {
 
     public void addCohortMembers(List<CohortMember> cohortMembers) throws CohortReplaceException {
         try {
-            cohortService.saveCohortMembers(cohortMembers);
+            if (Utils.listHasElements((ArrayList<?>) cohortMembers)) cohortService.saveCohortMembers(cohortMembers);
         } catch (IOException e) {
             throw new CohortReplaceException(e);
         }

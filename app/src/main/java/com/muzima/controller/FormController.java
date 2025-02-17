@@ -797,7 +797,7 @@ public class FormController {
         try {
             List<FormData> formDataByTemplateUUID = formService.getFormDataByTemplateUUID(templateUUID);
             for (FormData formData : formDataByTemplateUUID) {
-                if (!formData.getStatus().equals(Constants.STATUS_UPLOADED)) {
+                if (formData.getStatus() != null && !formData.getStatus().equals(Constants.STATUS_UPLOADED)) {
                     incompleteFormData.add(formData);
                 }
             }

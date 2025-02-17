@@ -1014,23 +1014,45 @@ class HTMLFormDataStore {
     @JavascriptInterface
     public String getObsByEncounterType(String patientUuid, String encounterType) throws JSONException, ConceptController.ConceptFetchException {
         List<Observation> observations = new ArrayList<>();
-        List<Encounter> encounters = new ArrayList<>();
+
         try {
-            encounters = encounterController.getEncountersByPatientUuid(patientUuid);
-            if(!Utils.listHasElements((ArrayList<?>) encounters)) return null;
+            List<Encounter> encounters = encounterController.getEncountersByPatientUuid(patientUuid);
+
+            if (encounters == null || encounters.isEmpty()) {
+                Log.w(getClass().getSimpleName(), "No encounters found for patient: " + patientUuid);
+                return "[]"; // Return an empty JSON array instead of null
+            }
+
             for (Encounter enc : encounters) {
-                if (enc.getEncounterType().getEncounterTypeName().equals(encounterType)) {
-                    observations.addAll(observationController.getObservationsByEncounterId(enc.getEncounterId()));
+                if (enc != null && enc.getEncounterType() != null && enc.getEncounterType().getEncounterTypeName() != null) {
+                    if (enc.getEncounterType().getEncounterTypeName().equals(encounterType)) {
+                        List<Observation> obsList = observationController.getObservationsByEncounterId(enc.getEncounterId());
+                        if (obsList != null) {
+                            observations.addAll(obsList);
+                        } else {
+                            Log.w(getClass().getSimpleName(), "No observations found for encounter ID: " + enc.getEncounterId());
+                        }
+                    }
+                } else {
+                    Log.w(getClass().getSimpleName(), "EncounterType is null for an encounter. Skipping...");
                 }
             }
-            Collections.sort(observations, observationDateTimeComparator);
-        } catch (ObservationController.LoadObservationException | Exception e) {
+
+            if (!observations.isEmpty()) {
+                Collections.sort(observations, observationDateTimeComparator);
+            }
+
+        } catch (ObservationController.LoadObservationException e) {
             Log.e(getClass().getSimpleName(), "Exception occurred while loading observations", e);
         } catch (EncounterController.FetchEncounterException e) {
             Log.e(getClass().getSimpleName(), "Exception occurred while loading encounters", e);
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), "Unexpected exception occurred", e);
         }
+
         return createObsJsonArray(observations);
     }
+
 
     private String createObsJsonArray(List<Observation> observations) throws JSONException, ConceptController.ConceptFetchException {
         int i = 0;
@@ -1087,7 +1109,8 @@ class HTMLFormDataStore {
             }
             json.put("valueNumeric", obs.getValueNumeric());
             json.put("valueText", obs.getValueText());
-            json.put("encounterId", obs.getEncounter() != null ? obs.getEncounter().getEncounterId() : null);
+            json.put("encounterId", obs.getEncounter() != null ? obs.getEncounter().getEncounterId() : "");
+            //json.put("encounterId", obs.getEncounter().getEncounterId());
             json.put("uuid", obs.getObsUuid());
             json.put("valueComplex", obs.getValueComplex());
             json.put("valueDatetime", convertedvalueDateTime);
@@ -1628,7 +1651,7 @@ class HTMLFormDataStore {
             if (lastTriangulation != null) {
                 List<Observation> lastAttempts = observationController.getObservationsByPatientuuidAndConceptId(patientUuid, conceptId);
                 if (!Utils.listHasElements((ArrayList<?>) lastAttempts)) {
-                    return null;
+                    return "[]";
                 }
                 Collections.sort(lastAttempts, observationDateTimeComparator);
                 Observation lastAttempt = lastAttempts.get(0);
