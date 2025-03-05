@@ -9,7 +9,7 @@
   ~ this code in a for-profit venture, please contact the copyright holder.
   -->
 
-<com.muzima.view.custom.CheckedLinearLayout
+<mz.org.csaude.emuzima.view.custom.CheckedLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -43,4 +43,4 @@
             android:tint="#990000"
             android:visibility="gone"
             android:contentDescription="@string/info_downloaded_image"/>
-</com.muzima.view.custom.CheckedLinearLayout>
+</mz.org.csaude.emuzima.view.custom.CheckedLinearLayout>

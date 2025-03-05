@@ -21,6 +21,8 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import mz.org.csaude.emuzima.view.progressdialog.MuzimaProgressDialog;
+
 public class MuzimaProgressDialogTest {
 
     private ProgressDialog progressDialog;

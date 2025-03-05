@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import mz.org.csaude.emuzima.utils.StringUtils;
+
 public class StringUtilsTest {
 
     @Test

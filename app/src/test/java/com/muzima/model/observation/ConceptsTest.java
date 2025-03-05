@@ -23,6 +23,9 @@ import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
+import mz.org.csaude.emuzima.model.observation.ConceptWithObservations;
+import mz.org.csaude.emuzima.model.observation.Concepts;
+
 public class ConceptsTest {
 
     @Test

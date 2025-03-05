@@ -9,7 +9,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.muzima"
+    package="mz.org.csaude.emuzima"
     android:versionName="${versionName}">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -119,7 +119,7 @@
             android:parentActivityName=".view.MainDashboardActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.MainDashboardActivity" />
+                android:value=".view.MainDashboardActivity" />
         </activity>
         <activity
             android:name=".view.help.InteractiveHelpActivity"
@@ -129,7 +129,7 @@
             android:parentActivityName=".view.MainDashboardActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.MainDashboardActivity" />
+                android:value=".view.MainDashboardActivity" />
         </activity>
         <activity
             android:name=".view.help.FeedbackActivity"
@@ -139,7 +139,7 @@
             android:parentActivityName=".view.MainDashboardActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.MainDashboardActivity" />
+                android:value=".view.MainDashboardActivity" />
         </activity>
         <activity
             android:name=".view.help.WebViewActivity"
@@ -149,7 +149,7 @@
             android:parentActivityName=".view.BaseActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.help.WebViewActivity" />
+                android:value=".view.help.WebViewActivity" />
         </activity>
         <activity
             android:name=".view.patients.PatientsSearchActivity"
@@ -182,7 +182,7 @@
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.forms.FormsWithDataActivity" />
+                android:value=".view.forms.FormsWithDataActivity" />
         </activity>
         <activity
             android:name=".view.forms.HTMLFormWebViewActivity"
@@ -193,7 +193,7 @@
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.forms.FormsWithDataActivity" />
+                android:value=".view.forms.FormsWithDataActivity" />
         </activity>
         <activity
             android:name=".view.forms.RegistrationFormsActivity"
@@ -209,7 +209,7 @@
             android:parentActivityName=".view.forms.FormsWithDataActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.forms.FormsWithDataActivity" />
+                android:value=".view.forms.FormsWithDataActivity" />
         </activity>
         <activity
             android:name=".view.reports.PatientReportActivity"
@@ -219,7 +219,7 @@
             android:parentActivityName=".view.patients.PatientSummaryActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.patients.PatientSummaryActivity" />
+                android:value=".view.patients.PatientSummaryActivity" />
         </activity>
         <activity
             android:name=".view.reports.PatientReportWebActivity"
@@ -229,7 +229,7 @@
             android:parentActivityName=".view.reports.PatientReportActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.reports.PatientReportActivity" />
+                android:value=".view.reports.PatientReportActivity" />
         </activity>
         <activity
             android:name=".utils.audio.AudioIntentActivity"
@@ -240,7 +240,7 @@
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.forms.FormsWithDataActivity" />
+                android:value=".view.forms.FormsWithDataActivity" />
         </activity>
         <activity
             android:name=".utils.video.VideoIntentActivity"
@@ -251,7 +251,7 @@
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.forms.FormsWithDataActivity" />
+                android:value=".view.forms.FormsWithDataActivity" />
         </activity>
         <activity
             android:name=".view.relationship.RelationshipsListActivity"
@@ -262,7 +262,7 @@
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.patients.PatientSummaryActivity" />
+                android:value=".view.patients.PatientSummaryActivity" />
         </activity>
         <activity
             android:name=".view.patients.PatientLocationMapActivity"
@@ -273,7 +273,7 @@
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.patients.PatientSummaryActivity" />
+                android:value=".view.patients.PatientSummaryActivity" />
         </activity>
         <activity
             android:name=".view.patients.PatientsLocationMapActivity"
@@ -284,7 +284,7 @@
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.patients.PatientsSearchActivity" />
+                android:value=".view.patients.PatientsSearchActivity" />
         </activity>
         <activity
             android:name=".view.maps.GPSLocationPickerActivity"
@@ -295,7 +295,7 @@
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.patients.PatientsSearchActivity" />
+                android:value=".view.patients.PatientsSearchActivity" />
         </activity>
 
         <activity
@@ -381,7 +381,7 @@
             android:parentActivityName=".view.help.HelpActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.help.HelpActivity" />
+                android:value=".view.help.HelpActivity" />
         </activity>
         <activity
             android:name=".view.help.VideoWebViewActivity"
@@ -392,7 +392,7 @@
             android:parentActivityName=".view.help.HelpActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.muzima.view.help.HelpActivity" />
+                android:value=".view.help.HelpActivity" />
         </activity>
         <activity
             android:name=".view.relationship.RelationshipFormsActivity"

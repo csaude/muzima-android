@@ -10,19 +10,20 @@
 
 package com.muzima.service;
 
-import com.muzima.MuzimaApplication;
+import mz.org.csaude.emuzima.MuzimaApplication;
 import com.muzima.api.model.Concept;
 import com.muzima.api.model.Encounter;
 import com.muzima.api.model.Observation;
 import com.muzima.api.model.Patient;
-import com.muzima.controller.ConceptController;
-import com.muzima.controller.EncounterController;
-import com.muzima.controller.FormController;
-import com.muzima.controller.LocationController;
-import com.muzima.controller.ObservationController;
-import com.muzima.controller.PatientController;
-import com.muzima.controller.ProviderController;
-import org.json.JSONException;
+import mz.org.csaude.emuzima.controller.ConceptController;
+import mz.org.csaude.emuzima.controller.EncounterController;
+import mz.org.csaude.emuzima.controller.FormController;
+import mz.org.csaude.emuzima.controller.LocationController;
+import mz.org.csaude.emuzima.controller.ObservationController;
+import mz.org.csaude.emuzima.controller.PatientController;
+import mz.org.csaude.emuzima.controller.ProviderController;
+import mz.org.csaude.emuzima.service.HTMLFormObservationCreator;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.io.InputStream;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;

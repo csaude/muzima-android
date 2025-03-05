@@ -22,6 +22,8 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import mz.org.csaude.emuzima.model.observation.EncounterWithObservations;
+
 public class EncounterWithObservationsTest {
     @Test
     public void shouldOrderTheObservationsByConceptName() {

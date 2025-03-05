@@ -16,12 +16,12 @@ import androidx.annotation.NonNull;
 import com.muzima.api.model.Patient;
 import com.muzima.api.model.PatientIdentifier;
 import com.muzima.api.model.PersonName;
-import com.muzima.controller.FormController;
-import com.muzima.controller.ObservationController;
-import com.muzima.model.CompleteFormWithPatientData;
-import com.muzima.model.collections.CompleteFormsWithPatientData;
+import mz.org.csaude.emuzima.controller.FormController;
+import mz.org.csaude.emuzima.controller.ObservationController;
+import mz.org.csaude.emuzima.model.CompleteFormWithPatientData;
+import mz.org.csaude.emuzima.model.collections.CompleteFormsWithPatientData;
 import com.muzima.testSupport.CustomTestRunner;
-import com.muzima.utils.StringUtils;
+import mz.org.csaude.emuzima.utils.StringUtils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,12 +34,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import static com.muzima.adapters.forms.CompleteFormsWithDataAdapter.BackgroundQueryTask;
+import static mz.org.csaude.emuzima.adapters.forms.CompleteFormsWithDataAdapter.BackgroundQueryTask;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import mz.org.csaude.emuzima.adapters.forms.CompleteFormsWithDataAdapter;
 
 @RunWith(CustomTestRunner.class)
 @Config(manifest= Config.NONE)

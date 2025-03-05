@@ -20,6 +20,8 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 
+import mz.org.csaude.emuzima.service.HTMLConceptParser;
+
 public class HTMLConceptParserTest {
 
     @Test

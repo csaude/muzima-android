@@ -12,7 +12,8 @@ package com.muzima.model.builders;
 
 import com.muzima.api.model.Form;
 import com.muzima.api.model.Tag;
-import com.muzima.model.AvailableForm;
+import mz.org.csaude.emuzima.model.AvailableForm;
+import mz.org.csaude.emuzima.model.builders.AvailableFormBuilder;
 
 import org.junit.Test;
 

@@ -17,7 +17,7 @@ import com.muzima.api.service.ConceptService;
 import com.muzima.api.service.EncounterService;
 import com.muzima.api.service.LastSyncTimeService;
 import com.muzima.api.service.ObservationService;
-import com.muzima.service.SntpService;
+import mz.org.csaude.emuzima.service.SntpService;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import mz.org.csaude.emuzima.controller.ObservationController;
 
 public class ObservationControllerGetEncountersTest {
     @Test

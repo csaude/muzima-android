@@ -8,7 +8,7 @@
   ~ If the user is an entity intending to commercialize any application that uses
   ~ this code in a for-profit venture, please contact the copyright holder.
   -->
-<com.muzima.view.custom.CheckedLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<mz.org.csaude.emuzima.view.custom.CheckedLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/item_patient_container"
                 android:paddingTop="2dp"
                 android:paddingBottom="2dp"
@@ -159,6 +159,6 @@
           android:layout_marginEnd="12dp"
           android:background="?attr/secondaryTextColor"/>
 </RelativeLayout>
-</com.muzima.view.custom.CheckedLinearLayout>
+</mz.org.csaude.emuzima.view.custom.CheckedLinearLayout>
 
 

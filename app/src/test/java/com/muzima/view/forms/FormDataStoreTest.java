@@ -10,15 +10,18 @@
 
 package com.muzima.view.forms;
 
-import com.muzima.MuzimaApplication;
+import mz.org.csaude.emuzima.MuzimaApplication;
 import com.muzima.api.model.FormData;
 import com.muzima.api.model.Patient;
-import com.muzima.controller.ConceptController;
-import com.muzima.controller.FormController;
-import com.muzima.controller.ObservationController;
-import com.muzima.controller.PatientController;
-import com.muzima.service.FormParser;
-import com.muzima.utils.Constants;
+import mz.org.csaude.emuzima.controller.ConceptController;
+import mz.org.csaude.emuzima.controller.FormController;
+import mz.org.csaude.emuzima.controller.ObservationController;
+import mz.org.csaude.emuzima.controller.PatientController;
+import mz.org.csaude.emuzima.service.FormParser;
+import mz.org.csaude.emuzima.utils.Constants;
+import mz.org.csaude.emuzima.view.forms.FormDataStore;
+import mz.org.csaude.emuzima.view.forms.FormWebViewActivity;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,7 +33,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.text.ParseException;
 
-import static com.muzima.utils.Constants.FORM_DISCRIMINATOR_REGISTRATION;
+import static mz.org.csaude.emuzima.utils.Constants.FORM_DISCRIMINATOR_REGISTRATION;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyInt;

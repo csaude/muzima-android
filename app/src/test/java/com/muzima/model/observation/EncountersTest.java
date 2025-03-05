@@ -22,6 +22,9 @@ import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 import static org.junit.matchers.JUnitMatchers.hasItems;
 
+import mz.org.csaude.emuzima.model.observation.EncounterWithObservations;
+import mz.org.csaude.emuzima.model.observation.Encounters;
+
 public class EncountersTest {
 
     @Test

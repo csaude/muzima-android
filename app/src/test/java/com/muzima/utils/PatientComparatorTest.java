@@ -21,6 +21,8 @@ import java.util.Collections;
 
 import static junit.framework.Assert.assertTrue;
 
+import mz.org.csaude.emuzima.utils.PatientComparator;
+
 public class PatientComparatorTest {
 
     private PatientComparator patientComparator;

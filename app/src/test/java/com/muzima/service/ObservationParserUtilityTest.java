@@ -10,7 +10,7 @@
 
 package com.muzima.service;
 
-import com.muzima.MuzimaApplication;
+import mz.org.csaude.emuzima.MuzimaApplication;
 import com.muzima.api.model.Concept;
 import com.muzima.api.model.Encounter;
 import com.muzima.api.model.EncounterType;
@@ -18,11 +18,13 @@ import com.muzima.api.model.Form;
 import com.muzima.api.model.Observation;
 import com.muzima.api.model.Patient;
 import com.muzima.api.model.Provider;
-import com.muzima.controller.ConceptController;
-import com.muzima.controller.FormController;
-import com.muzima.controller.LocationController;
-import com.muzima.controller.ObservationController;
-import com.muzima.controller.ProviderController;
+import mz.org.csaude.emuzima.controller.ConceptController;
+import mz.org.csaude.emuzima.controller.FormController;
+import mz.org.csaude.emuzima.controller.LocationController;
+import mz.org.csaude.emuzima.controller.ObservationController;
+import mz.org.csaude.emuzima.controller.ProviderController;
+import mz.org.csaude.emuzima.service.ObservationParserUtility;
+
 import com.muzima.testSupport.CustomTestRunner;
 import org.junit.Before;
 import org.junit.Test;

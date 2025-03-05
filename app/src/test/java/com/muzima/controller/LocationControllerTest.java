@@ -12,7 +12,7 @@ package com.muzima.controller;
 
 import com.muzima.api.model.Location;
 import com.muzima.api.service.LocationService;
-import org.apache.lucene.queryParser.ParseException;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,6 +26,8 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import mz.org.csaude.emuzima.controller.LocationController;
 
 public class LocationControllerTest {
 

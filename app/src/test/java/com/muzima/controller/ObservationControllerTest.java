@@ -17,8 +17,8 @@ import com.muzima.api.service.ConceptService;
 import com.muzima.api.service.EncounterService;
 import com.muzima.api.service.LastSyncTimeService;
 import com.muzima.api.service.ObservationService;
-import com.muzima.model.observation.ConceptWithObservations;
-import com.muzima.service.SntpService;
+import mz.org.csaude.emuzima.model.observation.ConceptWithObservations;
+import mz.org.csaude.emuzima.service.SntpService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -41,6 +41,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import mz.org.csaude.emuzima.controller.ObservationController;
 
 public class ObservationControllerTest {
 
