@@ -1727,12 +1727,14 @@ public class MuzimaSyncService {
                                         PatientTag firstAttemptTag = new PatientTag();
                                         firstAttemptTag.setName("SIM");
                                         firstAttemptTag.setUuid(SIM_TAG_UUID);
+                                        firstAttemptTag.setDescription("Sim Encontrado");
                                         tags.add(firstAttemptTag);
                                         patientController.savePatientTags(firstAttemptTag);
                                     } else {
                                         PatientTag firstAttemptTag = new PatientTag();
                                         firstAttemptTag.setName("NÃO");
                                         firstAttemptTag.setUuid(NAO_TAG_UUID);
+                                        firstAttemptTag.setDescription("Não Encontrado");
                                         tags.add(firstAttemptTag);
                                         patientController.savePatientTags(firstAttemptTag);
                                     }
@@ -1746,12 +1748,14 @@ public class MuzimaSyncService {
                                         PatientTag secondAttemptTag = new PatientTag();
                                         secondAttemptTag.setName("SIM");
                                         secondAttemptTag.setUuid(SIM_TAG_UUID);
+                                        secondAttemptTag.setDescription("Sim Encontrado");
                                         tags.add(secondAttemptTag);
                                         patientController.savePatientTags(secondAttemptTag);
                                     } else {
                                         PatientTag secondAttemptTag = new PatientTag();
                                         secondAttemptTag.setName("NÃO");
                                         secondAttemptTag.setUuid(NAO_TAG_UUID);
+                                        secondAttemptTag.setDescription("Não Encontrado");
                                         tags.add(secondAttemptTag);
                                         patientController.savePatientTags(secondAttemptTag);
                                     }
@@ -1765,12 +1769,14 @@ public class MuzimaSyncService {
                                         PatientTag thirdAttemptTag = new PatientTag();
                                         thirdAttemptTag.setName("SIM");
                                         thirdAttemptTag.setUuid(SIM_TAG_UUID);
+                                        thirdAttemptTag.setDescription("Sim Encontrado");
                                         tags.add(thirdAttemptTag);
                                         patientController.savePatientTags(thirdAttemptTag);
                                     } else {
                                         PatientTag thirdAttemptTag = new PatientTag();
                                         thirdAttemptTag.setName("NÃO");
                                         thirdAttemptTag.setUuid(NAO_TAG_UUID);
+                                        thirdAttemptTag.setDescription("Não Encontrado");
                                         tags.add(thirdAttemptTag);
                                         patientController.savePatientTags(thirdAttemptTag);
                                     }

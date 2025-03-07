@@ -382,7 +382,23 @@ public class PatientSummaryActivity extends ActivityWithPatientSummaryBottomNavi
 
             artStartDate.setText(getObsByPatientUuidAndConceptId(patientUuid, 1190));
             testingSector.setText(getObsByPatientUuidAndConceptId(patientUuid, 23877));
-            preferredTestingLocation.setText(getObsByPatientUuidAndConceptId(patientUuid, 21155));
+
+            List<Observation> preferredTestingLocationObs = observationController.getObservationsByPatientuuidAndConceptId(patientUuid, 21155);
+
+            Collections.sort(preferredTestingLocationObs, observationDateTimeComparator);
+            if (preferredTestingLocationObs.size() > 0) {
+                Observation observation = preferredTestingLocationObs.get(0);
+                if (observation.getValueCoded().getConceptid() == 6403) {
+                    preferredTestingLocation.setText("Comunidade");
+                } else if (observation.getValueCoded().getConceptid() == 21154) {
+                    preferredTestingLocation.setText("Unidade Sanitária");
+                } else {
+                    preferredTestingLocation.setText("-----------------");
+                }
+            }
+
+            getObsByPatientUuidAndConceptId(patientUuid, 23878);
+
             testingDate.setText(getObsByPatientUuidAndConceptId(patientUuid, 23879));
 
             Observation candidateConsentDateObs = getEncounterDateTimeByPatientUuidAndConceptIdAndValuedCodedAndEncounterTypeUuid(patientUuid,21155, 21154,6403,"4f215536-f90d-4e0c-81e1-074047eecd68");
