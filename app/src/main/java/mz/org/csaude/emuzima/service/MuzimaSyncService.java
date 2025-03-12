@@ -1618,7 +1618,7 @@ public class MuzimaSyncService {
 
                                                 noInterventionTag = new PatientTag();
                                                 noInterventionTag.setName("NA");
-                                                noInterventionTag.setDescription(muzimaApplication.getString(R.string.general_no_intervention_needed));
+                                                noInterventionTag.setDescription("Não aplicável");
                                                 noInterventionTag.setUuid(NO_INTERVENTION_NEEDED_UUID);
                                                 tags.add(noInterventionTag);
                                                 patientController.savePatientTags(noInterventionTag);

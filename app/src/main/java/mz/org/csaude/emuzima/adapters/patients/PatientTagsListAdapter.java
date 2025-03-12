@@ -221,8 +221,10 @@ public class PatientTagsListAdapter extends ListAdapter<PatientTag> implements A
                     VTag = tag;
                 else if(tag.getUuid().equals(NOT_ALL_CONTACTS_VISITED_TAG_UUID))
                     NVTag = tag;
-                else if(tag.getUuid().equals(NO_INTERVENTION_NEEDED_UUID))
+                else if(tag.getUuid().trim().equals(NO_INTERVENTION_NEEDED_UUID.trim())){
+                    tag.setDescription(getContext().getString(R.string.general_no_intervention_needed));
                     NATag = tag;
+                }
                 else
                     otherTags.add(tag);
             }
