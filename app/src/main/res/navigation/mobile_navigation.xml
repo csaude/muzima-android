@@ -17,34 +17,34 @@
 
     <fragment
             android:id="@+id/nav_home"
-            android:name="com.muzima.view.fragments.DashboardHomeFragment"
+            android:name="mz.org.csaude.emuzima.view.fragments.DashboardHomeFragment"
             tools:layout="@layout/fragment_dashboard_home"/>
 
     <activity
             android:id="@+id/nav_settings"
-            android:name="com.muzima.view.preferences.SettingsActivity"/>
+            android:name="mz.org.csaude.emuzima.view.preferences.SettingsActivity"/>
 
     <activity
             android:id="@+id/nav_active_config_selection"
-            android:name="com.muzima.view.login.ActiveConfigSelectionActivity"/>
+            android:name="mz.org.csaude.emuzima.view.login.ActiveConfigSelectionActivity"/>
 
     <activity
             android:id="@+id/nav_help"
-            android:name="com.muzima.view.help.HelpActivity"
+            android:name="mz.org.csaude.emuzima.view.help.HelpActivity"
             tools:layout="@layout/activity_help_new"/>
 
     <activity
             android:id="@+id/nav_feedback"
-            android:name="com.muzima.view.help.FeedbackActivity"
+            android:name="mz.org.csaude.emuzima.view.help.FeedbackActivity"
             tools:layout="@layout/activity_interactive_feedback"/>
 
     <activity
             android:id="@+id/nav_contact"
-            android:name="com.muzima.view.help.InteractiveHelpActivity"
+            android:name="mz.org.csaude.emuzima.view.help.InteractiveHelpActivity"
             tools:layout="@layout/activity_interactive_help"/>
 
     <activity
         android:id="@+id/nav_about_us"
-        android:name="com.muzima.view.AboutMuzimaActivity"
+        android:name="mz.org.csaude.emuzima.view.AboutMuzimaActivity"
         tools:layout="@layout/activity_about_muzima"/>
 </navigation>

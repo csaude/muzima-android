@@ -1,0 +1,107 @@
+/*
+ * Copyright (c) The Trustees of Indiana University, Moi University
+ * and Vanderbilt University Medical Center. All Rights Reserved.
+ *
+ * This version of the code is licensed under the MPL 2.0 Open Source license
+ * with additional health care disclaimer.
+ * If the user is an entity intending to commercialize any application that uses
+ * this code in a for-profit venture, please contact the copyright holder.
+ */
+
+package mz.org.csaude.emuzima.view;
+
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+import mz.org.csaude.emuzima.MuzimaApplication;
+import mz.org.csaude.emuzima.R;
+import mz.org.csaude.emuzima.domain.Credentials;
+import mz.org.csaude.emuzima.service.MuzimaLoggerService;
+import mz.org.csaude.emuzima.utils.MuzimaPreferences;
+import mz.org.csaude.emuzima.utils.StringUtils;
+import mz.org.csaude.emuzima.utils.ThemeUtils;
+import mz.org.csaude.emuzima.view.initialwizard.OnboardScreenActivity;
+import mz.org.csaude.emuzima.view.initialwizard.TermsAndPolicyActivity;
+import mz.org.csaude.emuzima.view.login.LoginActivity;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
+
+public class BaseAuthenticatedActivity extends AppCompatActivity {
+    private static final String TAG = "BaseAuthenticatedActivity";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        setupActionBar();
+    }
+
+    private void setupActionBar() {
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowTitleEnabled(true);
+        }
+    }
+
+    @Override
+    public void onUserInteraction() {
+        ((MuzimaApplication) getApplication()).restartTimer();
+        super.onUserInteraction();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkDisclaimerOrCredentials();
+        ThemeUtils.getInstance().onResume(this);
+        Log.i(TAG, "onResume: BaseAuthenticatedActivity setCurrentActivity " + this.getClass().getSimpleName());
+        ((MuzimaApplication) getApplication()).setCurrentActivity(this);
+
+    }
+
+    private boolean checkDisclaimerOrCredentials() {
+        String disclaimerKey = getResources().getString(R.string.preference_disclaimer);
+        boolean disclaimerAccepted = MuzimaPreferences.getBooleanPreference(getApplicationContext(), disclaimerKey, false);
+        if (!MuzimaPreferences.getOnBoardingCompletedPreference(getApplicationContext())) {
+            Intent intent = new Intent(this, OnboardScreenActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
+        } else if (!disclaimerAccepted) {
+            Intent intent = new Intent(this, TermsAndPolicyActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
+        } else if (new Credentials(this).isEmpty()) {
+            launchLoginActivity(false);
+            return true;
+        }
+        return false;
+    }
+
+    public void logEvent(String tag, String details) {
+        if (StringUtils.isEmpty(details)) {
+            details = "{}";
+        }
+        MuzimaApplication muzimaApplication = (MuzimaApplication) getApplicationContext();
+        MuzimaLoggerService.log(muzimaApplication, tag, details);
+    }
+
+    public void launchLoginActivity(boolean isFirstLaunch) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(LoginActivity.isFirstLaunch, isFirstLaunch);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    protected void logEvent(String tag) {
+        logEvent(tag, null);
+    }
+}

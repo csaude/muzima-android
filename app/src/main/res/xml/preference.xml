@@ -122,7 +122,7 @@
             android:summary="@string/hint_manage_provider"
             android:title="@string/title_manage_provider">
             <intent
-                android:targetClass="com.muzima.view.preferences.ProviderPreferenceActivity"
+                android:targetClass="mz.org.csaude.emuzima.view.preferences.ProviderPreferenceActivity"
                 android:targetPackage="com.muzima" />
         </Preference>
         <ListPreference
@@ -136,7 +136,7 @@
             android:summary="@string/hint_manage_location"
             android:title="@string/title_manage_location">
             <intent
-                android:targetClass="com.muzima.view.preferences.LocationPreferenceActivity"
+                android:targetClass="mz.org.csaude.emuzima.view.preferences.LocationPreferenceActivity"
                 android:targetPackage="com.muzima" />
         </Preference>
 
@@ -147,7 +147,7 @@
             android:summary="@string/hint_manage_concept"
             android:title="@string/title_manage_concept">
             <intent
-                android:targetClass="com.muzima.view.preferences.ConceptPreferenceActivity"
+                android:targetClass="mz.org.csaude.emuzima.view.preferences.ConceptPreferenceActivity"
                 android:targetPackage="com.muzima" />
         </Preference>
 

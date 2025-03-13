@@ -11,7 +11,8 @@
 package com.muzima.model.builders;
 
 import com.muzima.api.model.Form;
-import com.muzima.model.DownloadedForm;
+import mz.org.csaude.emuzima.model.DownloadedForm;
+import mz.org.csaude.emuzima.model.builders.DownloadedFormBuilder;
 
 import org.junit.Test;
 

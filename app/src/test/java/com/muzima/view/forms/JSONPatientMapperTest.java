@@ -12,8 +12,10 @@ package com.muzima.view.forms;
 
 import com.muzima.api.model.Patient;
 import com.muzima.api.model.PatientIdentifier;
-import com.muzima.utils.Constants;
-import com.muzima.utils.DateUtils;
+import mz.org.csaude.emuzima.utils.Constants;
+import mz.org.csaude.emuzima.utils.DateUtils;
+import mz.org.csaude.emuzima.view.forms.PatientJSONMapper;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

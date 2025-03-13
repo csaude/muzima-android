@@ -10,12 +10,13 @@
 
 package com.muzima.view.forms;
 
-import com.muzima.MuzimaApplication;
+import mz.org.csaude.emuzima.MuzimaApplication;
 import com.muzima.api.model.FormData;
 import com.muzima.api.model.Patient;
 import com.muzima.api.model.User;
 import com.muzima.builder.PatientBuilder;
-import com.muzima.utils.StringUtils;
+import mz.org.csaude.emuzima.utils.StringUtils;
+import mz.org.csaude.emuzima.view.forms.HTMLPatientJSONMapper;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +28,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.muzima.utils.Constants.STANDARD_DATE_FORMAT;
+import static mz.org.csaude.emuzima.utils.Constants.STANDARD_DATE_FORMAT;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.containsString;

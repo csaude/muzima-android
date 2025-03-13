@@ -10,19 +10,22 @@
 
 package com.muzima.view.forms;
 
-import com.muzima.MuzimaApplication;
+import mz.org.csaude.emuzima.MuzimaApplication;
 import com.muzima.api.model.FormData;
 import com.muzima.api.model.SetupConfigurationTemplate;
-import com.muzima.controller.ConceptController;
-import com.muzima.controller.EncounterController;
-import com.muzima.controller.FormController;
-import com.muzima.controller.LocationController;
-import com.muzima.controller.MuzimaSettingController;
-import com.muzima.controller.ObservationController;
-import com.muzima.controller.ProviderController;
-import com.muzima.controller.SetupConfigurationController;
-import com.muzima.service.HTMLFormObservationCreator;
-import com.muzima.utils.Constants;
+import mz.org.csaude.emuzima.controller.ConceptController;
+import mz.org.csaude.emuzima.controller.EncounterController;
+import mz.org.csaude.emuzima.controller.FormController;
+import mz.org.csaude.emuzima.controller.LocationController;
+import mz.org.csaude.emuzima.controller.MuzimaSettingController;
+import mz.org.csaude.emuzima.controller.ObservationController;
+import mz.org.csaude.emuzima.controller.ProviderController;
+import mz.org.csaude.emuzima.controller.SetupConfigurationController;
+import mz.org.csaude.emuzima.service.HTMLFormObservationCreator;
+import mz.org.csaude.emuzima.utils.Constants;
+import mz.org.csaude.emuzima.view.forms.HTMLFormDataStore;
+import mz.org.csaude.emuzima.view.forms.HTMLFormWebViewActivity;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

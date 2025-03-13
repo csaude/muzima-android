@@ -18,7 +18,7 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="false"
         android:orientation="vertical"
-        tools:context="mz.org.csaude.muzima.view.fragments.patient.DataCollectionFragment">
+        tools:context="mz.org.csaude.emuzima.view.fragments.patient.DataCollectionFragment">
 
     <com.google.android.material.tabs.TabLayout
             android:id="@+id/dcTabLayout"

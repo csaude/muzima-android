@@ -14,7 +14,7 @@ package com.muzima.view;
 import android.widget.ListView;
 
 import com.muzima.testSupport.CustomTestRunner;
-import com.muzima.view.forms.FormsWithDataActivity;
+import mz.org.csaude.emuzima.view.forms.FormsWithDataActivity;
 
 import org.junit.Before;
 import org.junit.Test;

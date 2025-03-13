@@ -22,12 +22,14 @@ import java.util.Date;
 import java.util.Scanner;
 
 import static com.muzima.builder.PatientBuilder.patient;
-import static com.muzima.utils.DateUtils.getFormattedDate;
+import static mz.org.csaude.emuzima.utils.DateUtils.getFormattedDate;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import mz.org.csaude.emuzima.view.forms.PatientJSONMapper;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest= Config.NONE)

@@ -10,7 +10,7 @@
 
 package com.muzima.controller;
 
-import com.muzima.MuzimaApplication;
+import mz.org.csaude.emuzima.MuzimaApplication;
 import com.muzima.api.model.Concept;
 import com.muzima.api.model.ConceptName;
 import com.muzima.api.service.ConceptService;
@@ -29,6 +29,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+
+import mz.org.csaude.emuzima.controller.ConceptController;
 
 public class ConceptControllerTest {
 

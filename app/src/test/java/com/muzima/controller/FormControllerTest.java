@@ -10,7 +10,7 @@
 
 package com.muzima.controller;
 
-import com.muzima.MuzimaApplication;
+import mz.org.csaude.emuzima.MuzimaApplication;
 import com.muzima.api.context.MuzimaContext;
 import com.muzima.api.model.Form;
 import com.muzima.api.model.FormData;
@@ -31,13 +31,13 @@ import com.muzima.api.service.SetupConfigurationService;
 import com.muzima.builder.FormBuilder;
 import com.muzima.builder.FormTemplateBuilder;
 import com.muzima.builder.TagBuilder;
-import com.muzima.model.AvailableForm;
-import com.muzima.model.BaseForm;
-import com.muzima.model.collections.AvailableForms;
-import com.muzima.model.collections.DownloadedForms;
-import com.muzima.service.SntpService;
-import com.muzima.utils.Constants;
-import com.muzima.utils.StringUtils;
+import mz.org.csaude.emuzima.model.AvailableForm;
+import mz.org.csaude.emuzima.model.BaseForm;
+import mz.org.csaude.emuzima.model.collections.AvailableForms;
+import mz.org.csaude.emuzima.model.collections.DownloadedForms;
+import mz.org.csaude.emuzima.service.SntpService;
+import mz.org.csaude.emuzima.utils.Constants;
+import mz.org.csaude.emuzima.utils.StringUtils;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -68,6 +68,10 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+
+import mz.org.csaude.emuzima.controller.FormController;
+import mz.org.csaude.emuzima.controller.MuzimaSettingController;
+import mz.org.csaude.emuzima.controller.PatientController;
 
 public class FormControllerTest {
     private FormController formController;

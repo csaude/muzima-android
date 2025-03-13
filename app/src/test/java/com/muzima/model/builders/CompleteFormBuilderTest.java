@@ -11,7 +11,9 @@
 package com.muzima.model.builders;
 
 import com.muzima.api.model.Form;
-import com.muzima.model.CompleteFormWithPatientData;
+import mz.org.csaude.emuzima.model.CompleteFormWithPatientData;
+import mz.org.csaude.emuzima.model.builders.CompleteFormWithPatientDataBuilder;
+
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;

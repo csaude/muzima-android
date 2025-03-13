@@ -10,11 +10,13 @@
 
 package com.muzima.model;
 
-import com.muzima.utils.Constants;
+import mz.org.csaude.emuzima.utils.Constants;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+
+import mz.org.csaude.emuzima.model.AvailableForm;
 
 public class AvailableFormTest {
     private final String[] registrationDiscriminators = {Constants.FORM_DISCRIMINATOR_REGISTRATION,

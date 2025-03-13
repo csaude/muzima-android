@@ -83,7 +83,7 @@
                         android:layout_marginTop="12dp"
                         android:padding="8dp">
 
-                        <mz.org.csaude.muzima.view.relationship.AutocompleteRelatedPersonTextView
+                        <mz.org.csaude.emuzima.view.relationship.AutocompleteRelatedPersonTextView
                             android:hint="@string/hint_person_search"
                             android:textSize="14sp"
                             android:fontFamily="@font/montserrat_regular"

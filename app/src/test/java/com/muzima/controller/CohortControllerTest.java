@@ -10,7 +10,7 @@
 
 package com.muzima.controller;
 
-import com.muzima.MuzimaApplication;
+import mz.org.csaude.emuzima.MuzimaApplication;
 import com.muzima.api.model.Cohort;
 import com.muzima.api.model.CohortData;
 import com.muzima.api.model.LastSyncTime;
@@ -19,8 +19,8 @@ import com.muzima.api.service.CohortService;
 import com.muzima.api.service.LastSyncTimeService;
 import com.muzima.api.service.MuzimaSettingService;
 import com.muzima.api.service.SetupConfigurationService;
-import com.muzima.service.SntpService;
-import com.muzima.utils.StringUtils;
+import mz.org.csaude.emuzima.service.SntpService;
+import mz.org.csaude.emuzima.utils.StringUtils;
 import org.apache.lucene.queryParser.ParseException;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,6 +49,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+
+import mz.org.csaude.emuzima.controller.CohortController;
+import mz.org.csaude.emuzima.controller.MuzimaSettingController;
+import mz.org.csaude.emuzima.controller.ProviderController;
 
 public class CohortControllerTest {
     private CohortController controller;
