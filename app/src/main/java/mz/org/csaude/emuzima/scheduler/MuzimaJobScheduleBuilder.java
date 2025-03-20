@@ -1,13 +1,3 @@
-/*
- * Copyright (c) The Trustees of Indiana University, Moi University
- * and Vanderbilt University Medical Center. All Rights Reserved.
- *
- * This version of the code is licensed under the MPL 2.0 Open Source license
- * with additional health care disclaimer.
- * If the user is an entity intending to commercialize any application that uses
- * this code in a for-profit venture, please contact the copyright holder.
- */
-
 package mz.org.csaude.emuzima.scheduler;
 
 import android.app.job.JobInfo;
@@ -16,11 +6,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
-
-import androidx.annotation.RequiresApi;
-
+import android.os.Looper;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import mz.org.csaude.emuzima.MuzimaApplication;
 import mz.org.csaude.emuzima.R;
 
@@ -29,8 +18,9 @@ import static mz.org.csaude.emuzima.utils.Constants.DataSyncServiceConstants.Muz
 import static mz.org.csaude.emuzima.utils.Constants.DataSyncServiceConstants.MuzimaJobSchedulerConstants.MUZIMA_JOB_PERIODIC;
 
 public class MuzimaJobScheduleBuilder {
-    private MuzimaApplication muzimaApplication;
-    private Context context;
+    private final MuzimaApplication muzimaApplication;
+    private final Context context;
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());  // Ensures UI tasks run on the main thread
 
     public MuzimaJobScheduleBuilder(Context context) {
         this.muzimaApplication = (MuzimaApplication) context.getApplicationContext();
@@ -40,64 +30,53 @@ public class MuzimaJobScheduleBuilder {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void schedulePeriodicBackgroundJob(int delay, boolean isManualSync) {
         if (isManualSync) {
-            final Handler handler = new Handler();
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    if (!isJobAlreadyScheduled(context)) {
-                        Toast.makeText(context,  context.getResources().getString(R.string.info_muzima_sync_service_in_progress), Toast.LENGTH_LONG).show();
-                        handleScheduledPeriodicDataSyncJob();
-                    } else
-                        Toast.makeText(context, context.getResources().getString(R.string.general_sync_service_already_running), Toast.LENGTH_LONG).show();
+            mainHandler.postDelayed(() -> {
+                if (!isJobAlreadyScheduled(context)) {
+                    showToast(context.getResources().getString(R.string.info_muzima_sync_service_in_progress));
+                    handleScheduledPeriodicDataSyncJob();
+                } else {
+                    showToast(context.getResources().getString(R.string.general_sync_service_already_running));
                 }
-            };
-            handler.postDelayed(runnable, delay);
+            }, delay);
         } else {
-            if (((MuzimaApplication)context).getMuzimaSettingController().isRealTimeSyncEnabled()) {
-                final Handler handler = new Handler();
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!isJobAlreadyScheduled(context)) {
-                            handleScheduledPeriodicDataSyncJob();
-                        }
-                        handler.postDelayed(this, MUZIMA_JOB_PERIODIC);
+            if (muzimaApplication.getMuzimaSettingController().isRealTimeSyncEnabled()) {
+                mainHandler.postDelayed(() -> {
+                    if (!isJobAlreadyScheduled(context)) {
+                        handleScheduledPeriodicDataSyncJob();
                     }
-                };
-                handler.postDelayed(runnable, delay);
+                    mainHandler.postDelayed(this::handleScheduledPeriodicDataSyncJob, MUZIMA_JOB_PERIODIC);
+                }, delay);
             }
         }
+    }
+
+    private void showToast(String message) {
+        mainHandler.post(() -> Toast.makeText(context, message, Toast.LENGTH_LONG).show());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static boolean isJobAlreadyScheduled(Context context) {
         JobScheduler scheduler = (JobScheduler) context.getSystemService(JOB_SCHEDULER_SERVICE);
-
-        boolean hasBeenScheduled = false;
-
-        for (JobInfo jobInfo : scheduler.getAllPendingJobs()) {
-            if (jobInfo.getId() == MESSAGE_SYNC_JOB_ID) {
-                hasBeenScheduled = true;
-                break;
+        if (scheduler != null) {
+            for (JobInfo jobInfo : scheduler.getAllPendingJobs()) {
+                if (jobInfo.getId() == MESSAGE_SYNC_JOB_ID) {
+                    return true;
+                }
             }
         }
-
-        return hasBeenScheduled;
+        return false;
     }
 
     private void handleScheduledPeriodicDataSyncJob() {
         ComponentName componentName = new ComponentName(context, MuzimaJobScheduler.class);
-        JobInfo mUzimaJobInfo;
+        JobInfo jobInfo = new JobInfo.Builder(MESSAGE_SYNC_JOB_ID, componentName)
+                .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                .setOverrideDeadline(MUZIMA_JOB_PERIODIC)
+                .build();
 
-            mUzimaJobInfo = new JobInfo
-                    .Builder(MESSAGE_SYNC_JOB_ID, componentName)
-                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-                    .setOverrideDeadline(MUZIMA_JOB_PERIODIC)
-                    .build();
-
-            JobScheduler jobScheduler = (JobScheduler) context.getSystemService(JOB_SCHEDULER_SERVICE);
-            if (jobScheduler != null) {
-                jobScheduler.schedule(mUzimaJobInfo);
-            }
+        JobScheduler jobScheduler = (JobScheduler) context.getSystemService(JOB_SCHEDULER_SERVICE);
+        if (jobScheduler != null) {
+            jobScheduler.schedule(jobInfo);
+        }
     }
 }
