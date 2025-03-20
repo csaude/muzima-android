@@ -1,13 +1,3 @@
-/*
- * Copyright (c) The Trustees of Indiana University, Moi University
- * and Vanderbilt University Medical Center. All Rights Reserved.
- *
- * This version of the code is licensed under the MPL 2.0 Open Source license
- * with additional health care disclaimer.
- * If the user is an entity intending to commercialize any application that uses
- * this code in a for-profit venture, please contact the copyright holder.
- */
-
 package mz.org.csaude.emuzima.view.cohort;
 
 import android.content.BroadcastReceiver;
@@ -17,6 +7,8 @@ import android.content.IntentFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -41,12 +33,13 @@ import mz.org.csaude.emuzima.utils.LanguageUtil;
 import mz.org.csaude.emuzima.utils.StringUtils;
 import mz.org.csaude.emuzima.utils.ThemeUtils;
 import mz.org.csaude.emuzima.view.custom.ActivityWithBottomNavigation;
-import org.greenrobot.eventbus.EventBus;;
+import org.greenrobot.eventbus.EventBus;
 
 public class CohortPagerActivity extends ActivityWithBottomNavigation {
     private ViewPager viewPager;
     private EditText searchCohorts;
     private final LanguageUtil languageUtil = new LanguageUtil();
+    private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     private ActionMenuItemView refreshMenuActionView;
     private ActionMenuItemView syncReportMenuActionView;
@@ -56,13 +49,13 @@ public class CohortPagerActivity extends ActivityWithBottomNavigation {
     private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            CohortPagerActivity.this.onReceive(context, intent);
+            onSyncReceived(context, intent);
         }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ThemeUtils.getInstance().onCreate(this,true);
+        ThemeUtils.getInstance().onCreate(this, true);
         languageUtil.onCreate(this);
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
@@ -71,7 +64,6 @@ public class CohortPagerActivity extends ActivityWithBottomNavigation {
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
-
         CohortsPagerAdapter cohortsPager = new CohortsPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(cohortsPager);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -81,7 +73,9 @@ public class CohortPagerActivity extends ActivityWithBottomNavigation {
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
                 searchCohorts.setText(StringUtils.EMPTY);
-                EventBus.getDefault().post(new DestroyActionModeEvent());
+                if (EventBus.getDefault().hasSubscriberForEvent(DestroyActionModeEvent.class)) {
+                    EventBus.getDefault().post(new DestroyActionModeEvent());
+                }
             }
 
             @Override
@@ -98,60 +92,36 @@ public class CohortPagerActivity extends ActivityWithBottomNavigation {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (searchCohorts.getText().toString() != null && !searchCohorts.getText().toString().isEmpty())
-                    EventBus.getDefault().post(new CohortSearchEvent(searchCohorts.getText().toString(), viewPager.getCurrentItem()));
-                else if (searchCohorts.getText().toString().isEmpty())
-                    EventBus.getDefault().post(new CohortSearchEvent(searchCohorts.getText().toString(), viewPager.getCurrentItem()));
+                EventBus.getDefault().post(new CohortSearchEvent(charSequence.toString(), viewPager.getCurrentItem()));
             }
 
             @Override
             public void afterTextChanged(Editable editable) {}
         });
 
-        refreshIconRotateAnimation = AnimationUtils.loadAnimation(CohortPagerActivity.this, R.anim.rotate_refresh);
+        refreshIconRotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_refresh);
         refreshIconRotateAnimation.setRepeatCount(Animation.INFINITE);
         refreshMenuActionView = findViewById(R.id.menu_load);
         syncReportMenuActionView = findViewById(R.id.menu_sync_report);
 
-        refreshMenuActionView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                processSync(refreshIconRotateAnimation);
-            }
-        });
-
-        syncReportMenuActionView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showBackgroundSyncProgressDialog(CohortPagerActivity.this);
-            }
-        });
+        refreshMenuActionView.setOnClickListener(view -> processSync(refreshIconRotateAnimation));
+        syncReportMenuActionView.setOnClickListener(view -> showBackgroundSyncProgressDialog(this));
         syncReportMenuActionView.setVisibility(View.GONE);
 
         Toolbar toolbar = findViewById(R.id.cohort_pager_toolbar);
         syncReportMenuIconDrawable = toolbar.getMenu().findItem(R.id.menu_sync_report).getIcon();
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
-        findViewById(R.id.menu_location).setVisibility(View.GONE);
-        findViewById(R.id.menu_tags).setVisibility(View.GONE);
-
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
         setTitle(StringUtils.EMPTY);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(MESSAGE_SENT_ACTION));
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter(PROGRESS_UPDATE_ACTION));
-
-        if(isDataSyncRunning() && refreshMenuActionView != null){
+        registerReceiver();
+        if (isDataSyncRunning()) {
             refreshMenuActionView.startAnimation(refreshIconRotateAnimation);
-        } else if(refreshMenuActionView != null){
+        } else {
             refreshMenuActionView.clearAnimation();
         }
     }
@@ -162,85 +132,64 @@ public class CohortPagerActivity extends ActivityWithBottomNavigation {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        try {
-            if (!EventBus.getDefault().isRegistered(this)) {
-                EventBus.getDefault().register(this);
+    private void registerReceiver() {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(MESSAGE_SENT_ACTION);
+        filter.addAction(PROGRESS_UPDATE_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, filter);
+    }
+
+    protected void onSyncReceived(Context context, Intent intent) {
+        new Thread(() -> {
+            int syncStatus = intent.getIntExtra(DataSyncServiceConstants.SYNC_STATUS, SyncStatusConstants.UNKNOWN_ERROR);
+            int syncType = intent.getIntExtra(DataSyncServiceConstants.SYNC_TYPE, -1);
+            int downloadCount = intent.getIntExtra(DataSyncServiceConstants.DOWNLOAD_COUNT_PRIMARY, 0);
+            String msg = "";
+
+            if (syncStatus == SyncStatusConstants.SUCCESS) {
+                switch (syncType) {
+                    case DataSyncServiceConstants.SYNC_COHORTS_METADATA:
+                        msg = getString(R.string.info_new_cohort_download, downloadCount);
+                        break;
+                    case DataSyncServiceConstants.SYNC_SELECTED_COHORTS_PATIENTS_FULL_DATA:
+                        int downloadCountSec = intent.getIntExtra(DataSyncServiceConstants.DOWNLOAD_COUNT_SECONDARY, 0);
+                        msg = getString(R.string.info_cohort_new_patient_download, downloadCount, downloadCountSec);
+                        break;
+                    case DataSyncServiceConstants.SYNC_ENCOUNTERS:
+                        msg = getString(R.string.info_new_encounter_download, downloadCount);
+                        EventBus.getDefault().post(new CohortsDownloadedEvent(true));
+                        break;
+                }
+            } else {
+                msg = getString(R.string.info_download_complete, syncStatus);
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+            String finalMsg = msg;
+            mainHandler.post(() -> Toast.makeText(CohortPagerActivity.this, finalMsg, Toast.LENGTH_SHORT).show());
+        }).start();
+    }
+
+    private void processSync(Animation rotation) {
+        if (!isDataSyncRunning()) {
+            mainHandler.post(() -> {
+                Toast.makeText(getApplicationContext(), getString(R.string.info_muzima_sync_service_in_progress), Toast.LENGTH_LONG).show();
+                refreshMenuActionView.startAnimation(rotation);
+                syncReportMenuActionView.setVisibility(View.GONE);
+                showBackgroundSyncProgressDialog(CohortPagerActivity.this);
+            });
+
+            new Thread(() -> {
+                mainHandler.post(() -> new MuzimaJobScheduleBuilder(getApplicationContext()).schedulePeriodicBackgroundJob(1000, true));
+                notifySyncStarted();
+            }).start();
+        } else {
+            mainHandler.post(() -> showBackgroundSyncProgressDialog(CohortPagerActivity.this));
         }
     }
 
-    protected void onReceive(Context context, Intent intent) {
-        int syncStatus = intent.getIntExtra(DataSyncServiceConstants.SYNC_STATUS, SyncStatusConstants.UNKNOWN_ERROR);
-        int syncType = intent.getIntExtra(DataSyncServiceConstants.SYNC_TYPE, -1);
-        int downloadCount = intent.getIntExtra(DataSyncServiceConstants.DOWNLOAD_COUNT_PRIMARY, 0);
-
-        if (syncStatus != SyncStatusConstants.SUCCESS)
-            EventBus.getDefault().post(new CohortsDownloadedEvent(false));
-        else {
-            String msg = StringUtils.EMPTY;
-
-            switch (syncType) {
-                case DataSyncServiceConstants.SYNC_COHORTS_METADATA:
-                    msg = getString(R.string.info_new_cohort_download, downloadCount);
-                    break;
-                case DataSyncServiceConstants.SYNC_SELECTED_COHORTS_PATIENTS_FULL_DATA:
-                    int downloadCountSec = intent.getIntExtra(DataSyncServiceConstants.DOWNLOAD_COUNT_SECONDARY, 0);
-                    msg = getString(R.string.info_cohort_new_patient_download, downloadCount, downloadCountSec) + getString(R.string.info_patient_data_download);
-                    break;
-                case DataSyncServiceConstants.SYNC_OBSERVATIONS:
-                    msg = getString(R.string.info_new_observation_download, downloadCount);
-                    break;
-                case DataSyncServiceConstants.SYNC_ENCOUNTERS:
-                    msg = getString(R.string.info_new_encounter_download, downloadCount);
-                    EventBus.getDefault().post(new CohortsDownloadedEvent(true));
-                    break;
-            }
-
-            if (StringUtils.isEmpty(msg))
-                msg = getString(R.string.info_download_complete, syncStatus) + " Sync type = " + intent.getIntExtra(DataSyncServiceConstants.SYNC_TYPE, -1);
-
-            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
-        }
-    }
 
     @Override
     protected int getBottomNavigationMenuItemId() {
         return R.id.action_cohorts;
-    }
-
-    private void processSync(Animation rotation){
-        if(!isDataSyncRunning()) {
-            Toast.makeText(getApplicationContext(), getResources().getString(R.string.info_muzima_sync_service_in_progress), Toast.LENGTH_LONG).show();
-            new MuzimaJobScheduleBuilder(getApplicationContext()).schedulePeriodicBackgroundJob(1000, true);
-
-            refreshMenuActionView.startAnimation(rotation);
-            syncReportMenuActionView.setVisibility(View.GONE);
-
-            notifySyncStarted();
-            showBackgroundSyncProgressDialog(CohortPagerActivity.this);
-        } else {
-            showBackgroundSyncProgressDialog(CohortPagerActivity.this);
-        }
-    }
-
-    protected void updateSyncProgressWidgets(boolean isSyncRunning){
-        if(isSyncRunning == false){
-            refreshMenuActionView.clearAnimation();
-            syncReportMenuActionView.setVisibility(View.VISIBLE);
-            if(isSyncCompletedWithError()){
-                syncReportMenuIconDrawable.mutate();
-                syncReportMenuIconDrawable.setColorFilter(getResources().getColor(R.color.red,getTheme()), PorterDuff.Mode.SRC_ATOP);
-            } else {
-                syncReportMenuIconDrawable.mutate();
-                syncReportMenuIconDrawable.setColorFilter(getResources().getColor(R.color.green,getTheme()), PorterDuff.Mode.SRC_ATOP);
-            }
-        } else{
-            refreshMenuActionView.startAnimation(refreshIconRotateAnimation);
-        }
     }
 }

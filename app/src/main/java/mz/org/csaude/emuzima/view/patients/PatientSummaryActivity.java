@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -159,7 +160,7 @@ public class PatientSummaryActivity extends ActivityWithPatientSummaryBottomNavi
         ThemeUtils.getInstance().onCreate(this, true);
         languageUtil.onCreate(this);
         super.onCreate(savedInstanceState);
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         setContentView(R.layout.activity_client_summary);
         initializeResources();
@@ -395,17 +396,12 @@ public class PatientSummaryActivity extends ActivityWithPatientSummaryBottomNavi
                 } else {
                     preferredTestingLocation.setText("-----------------");
                 }
+                lastConsentDate.setText(DateUtils.getFormattedDate(observation.getEncounter().getEncounterDatetime(), DateUtils.SIMPLE_DAY_MONTH_YEAR_DATE_FORMAT));
             }
 
             getObsByPatientUuidAndConceptId(patientUuid, 23878);
 
             testingDate.setText(getObsByPatientUuidAndConceptId(patientUuid, 23879));
-
-            Observation candidateConsentDateObs = getEncounterDateTimeByPatientUuidAndConceptIdAndValuedCodedAndEncounterTypeUuid(patientUuid,21155, 21154,6403,"4f215536-f90d-4e0c-81e1-074047eecd68");
-
-            if (candidateConsentDateObs != null) {
-                lastConsentDate.setText(DateUtils.getFormattedDate(candidateConsentDateObs.getEncounter().getEncounterDatetime(), DateUtils.SIMPLE_DAY_MONTH_YEAR_DATE_FORMAT));
-            }
 
 
 

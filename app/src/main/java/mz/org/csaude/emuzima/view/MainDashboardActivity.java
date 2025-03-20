@@ -26,6 +26,7 @@ import android.os.StrictMode;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -147,7 +148,7 @@ public class MainDashboardActivity extends ActivityWithBottomNavigation implemen
         super.onCreate(savedInstanceState);
         mainLayout = (DrawerLayout) getLayoutInflater().inflate(R.layout.activity_main, null);
         if (android.os.Build.VERSION.SDK_INT > 9) { StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); StrictMode.setThreadPolicy(policy); }
-        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
         setContentView(mainLayout);
         loadBottomNavigation();
         RealTimeFormUploader.getInstance().uploadAllCompletedForms(getApplicationContext(), false);
