@@ -9,7 +9,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="mz.org.csaude.emuzima"
+    package="mz.org.csaude.muzimamobile"
     android:versionName="${versionName}">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />

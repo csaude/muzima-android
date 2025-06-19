@@ -9,7 +9,7 @@
   ~ this code in a for-profit venture, please contact the copyright holder.
   -->
 
-<mz.org.csaude.emuzima.view.custom.CheckedLinearLayout
+<mz.org.csaude.muzimamobile.view.custom.CheckedLinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,4 +28,4 @@
             android:gravity="center"
             android:textColor="?attr/primaryTextColor"
             android:background="?attr/syncTextBackgroundColor"/>
-</mz.org.csaude.emuzima.view.custom.CheckedLinearLayout>
+</mz.org.csaude.muzimamobile.view.custom.CheckedLinearLayout>

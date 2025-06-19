@@ -14,7 +14,7 @@
     android:id="@+id/rl"
     style="@style/DashboardWrapper"
     android:orientation="vertical"
-    tools:context="mz.org.csaude.emuzima.view.MainDashboardActivity">
+    tools:context="mz.org.csaude.muzimamobile.view.MainDashboardActivity">
 
     <ExpandableListView
         android:id="@+id/lvExp"
