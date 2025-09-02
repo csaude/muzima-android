@@ -19,7 +19,7 @@
                   android:layout_width="match_parent"
                   android:layout_height="match_parent">
 
-        <mz.org.csaude.emuzima.view.custom.PagerSlidingTabStrip
+        <mz.org.csaude.muzimamobile.view.custom.PagerSlidingTabStrip
                 android:id="@+id/pager_indicator"
                 custom:indicatorColor="@color/tab_indicator"
                 custom:indicatorTextColor = "?attr/primaryTextColor"

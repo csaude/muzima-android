@@ -29,18 +29,20 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 
 
-group = 'mz.org.csaude.emuzima'
+group = 'mz.org.csaude.muzimamobile'
 description = 'Muzima-Android'
 
 android {
-    compileSdkVersion 34
+    namespace "mz.org.csaude.muzimamobile"   // <— ADICIONE ISTO
+    compileSdk 35
+    compileSdkVersion 35
     useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        minSdkVersion 24
-        targetSdkVersion 34
-        versionCode 35
-        versionName "3.8.0-RELEASE"
+        minSdk 29
+        targetSdkVersion 35
+        versionCode 45
+        versionName "3.8.1-RELEASE"
         vectorDrawables.useSupportLibrary = true
         manifestPlaceholders = [versionCode: defaultConfig.versionCode, versionName: defaultConfig.versionName]
 
@@ -49,9 +51,15 @@ android {
         multiDexEnabled true
     }
 
-    packagingOptions {
-        pickFirst 'META-INF/LICENSE'
-        pickFirst 'META-INF/DEPENDENCIES'
+    buildFeatures {
+        buildConfig true
+    }
+
+    packaging {
+        resources {
+            // só se você realmente precisa desses pickFirsts
+            pickFirsts += ['META-INF/LICENSE', 'META-INF/DEPENDENCIES']
+        }
     }
 
     compileOptions {
@@ -170,3 +178,16 @@ configurations {
         exclude group: 'org.json', module: 'json'
     }
 }
+
+android.applicationVariants.all { variant ->
+    if (variant.buildType.name == "release") {
+        def versionName = variant.versionName
+        def outputDir = variant.outputs[0].outputFile.parent
+        def newName = "muzima-android-${versionName}.aab"
+
+        variant.outputs.all { output ->
+            outputFileName = newName
+        }
+    }
+}
+

@@ -1,0 +1,219 @@
+/*
+ * Copyright (c) The Trustees of Indiana University, Moi University
+ * and Vanderbilt University Medical Center. All Rights Reserved.
+ *
+ * This version of the code is licensed under the MPL 2.0 Open Source license
+ * with additional health care disclaimer.
+ * If the user is an entity intending to commercialize any application that uses
+ * this code in a for-profit venture, please contact the copyright holder.
+ */
+package mz.org.csaude.muzimamobile.view.preferences;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.ListView;
+import android.widget.Toast;
+import android.view.ActionMode;
+import android.view.Menu;
+
+import mz.org.csaude.muzimamobile.utils.LanguageUtil;
+import mz.org.csaude.muzimamobile.utils.StringUtils;
+import android.view.MenuItem;
+
+import mz.org.csaude.muzimamobile.MuzimaApplication;
+import mz.org.csaude.muzimamobile.R;
+import mz.org.csaude.muzimamobile.adapters.concept.AutoCompleteProviderAdapter;
+import mz.org.csaude.muzimamobile.adapters.concept.SelectedProviderAdapter;
+import com.muzima.api.model.Provider;
+import mz.org.csaude.muzimamobile.utils.Constants;
+import mz.org.csaude.muzimamobile.utils.ThemeUtils;
+import mz.org.csaude.muzimamobile.view.BroadcastListenerActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.appcompat.app.ActionBar;
+
+public class ProviderPreferenceActivity extends BroadcastListenerActivity {
+    private SelectedProviderAdapter selectedProviderAdapter;
+    private ListView selectedProviderListView;
+    private AutoCompleteTextView autoCompleteProvidersTextView;
+    private boolean actionModeActive = false;
+    private ActionMode actionMode;
+    private final LanguageUtil languageUtil = new LanguageUtil();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        ThemeUtils.getInstance().onCreate(this,true);
+        languageUtil.onCreate(this);
+        super.onCreate(savedInstanceState);
+        setContentView(getContentView());
+
+        LayoutInflater inflator = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.provider_autocomplete_textview_action, null);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(v);
+
+        selectedProviderListView = findViewById(R.id.provider_preference_list);
+        final MuzimaApplication applicationContext = (MuzimaApplication) getApplicationContext();
+        selectedProviderAdapter = new SelectedProviderAdapter(this, R.layout.item_provider_list,
+                (applicationContext).getProviderController());
+        selectedProviderListView.setAdapter(selectedProviderAdapter);
+        selectedProviderListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        selectedProviderListView.setSelected(true);
+        selectedProviderListView.setClickable(true);
+        selectedProviderListView.setEmptyView(findViewById(R.id.no_provider_added));
+        selectedProviderListView.setOnItemClickListener(selectedProviderOnClickListener());
+        autoCompleteProvidersTextView = v.findViewById(R.id.add_provider);
+        AutoCompleteProviderAdapter autoCompleteProviderAdapter = new AutoCompleteProviderAdapter(this, R.layout.item_option_autocomplete, autoCompleteProvidersTextView);
+        autoCompleteProvidersTextView.setAdapter(autoCompleteProviderAdapter);
+        autoCompleteProvidersTextView.setOnItemClickListener(autoCompleteOnClickListener());
+
+        // this can happen on orientation change
+        if (actionModeActive) {
+            actionMode = startActionMode(new DeleteProvidersActionModeCallback());
+            actionMode.setTitle(String.valueOf(getSelectedProviders().size()));
+        }
+        logEvent("VIEW_PROVIDER_PREFERENCE");
+    }
+
+    private AdapterView.OnItemClickListener selectedProviderOnClickListener() {
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (!actionModeActive) {
+                    actionMode = startActionMode(new DeleteProvidersActionModeCallback());
+                    actionModeActive = true;
+                }
+                int selectedProvidersCount = getSelectedProviders().size();
+                if (selectedProvidersCount == 0 && actionModeActive) {
+                    actionMode.finish();
+                }
+                actionMode.setTitle(String.valueOf(selectedProvidersCount));
+            }
+        };
+    }
+
+    private AdapterView.OnItemClickListener autoCompleteOnClickListener() {
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+                Provider selectedProvider = (Provider) parent.getItemAtPosition(position);
+                if (selectedProviderAdapter.doesProviderAlreadyExist(selectedProvider)) {
+                    Log.e(getClass().getSimpleName(), "Providers Already exists");
+                    Toast.makeText(ProviderPreferenceActivity.this, "Provider " + selectedProvider.getName() + " already exists", Toast.LENGTH_SHORT).show();
+                } else {
+                    selectedProviderAdapter.addProvider(selectedProvider);
+                    selectedProviderAdapter.notifyDataSetChanged();
+                }
+                autoCompleteProvidersTextView.setText(StringUtils.EMPTY);
+            }
+        };
+    }
+
+    protected int getContentView() {
+        return R.layout.activity_provider_preference;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionmode_menu_close, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_close:
+                autoCompleteProvidersTextView.setText(StringUtils.EMPTY);
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        selectedProviderAdapter.reloadData();
+    }
+
+    @Override
+    protected void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
+        int syncStatus = intent.getIntExtra(Constants.DataSyncServiceConstants.SYNC_STATUS, Constants.DataSyncServiceConstants.SyncStatusConstants.UNKNOWN_ERROR);
+        int syncType = intent.getIntExtra(Constants.DataSyncServiceConstants.SYNC_TYPE, -1);
+
+        if (syncType == Constants.DataSyncServiceConstants.SYNC_TEMPLATES) {
+            if (syncStatus == Constants.DataSyncServiceConstants.SyncStatusConstants.SUCCESS) {
+                selectedProviderAdapter.reloadData();
+            }
+        }
+    }
+
+    final class DeleteProvidersActionModeCallback implements ActionMode.Callback {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            getMenuInflater().inflate(R.menu.actionmode_menu_delete, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.menu_delete:
+                    List<Provider> selectedProviders = getSelectedProviders();
+                    selectedProviderAdapter.removeAll(selectedProviders);
+                    onCompleteOfProviderDelete(selectedProviders.size());
+            }
+            return false;
+        }
+
+        private void onCompleteOfProviderDelete(int numberOfDeletedProviders) {
+            endActionMode();
+            selectedProviderListView.clearChoices();
+            selectedProviderAdapter.reloadData();
+            Toast.makeText(getApplicationContext(), getString(R.string.info_provider_delete_success,numberOfDeletedProviders), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode) {
+            actionModeActive = false;
+            selectedProviderAdapter.clearSelectedProviders();
+        }
+    }
+
+    private void endActionMode() {
+        if (actionMode != null) {
+            actionMode.finish();
+        }
+    }
+
+    private List<Provider> getSelectedProviders() {
+        List<Provider> providers = new ArrayList<>();
+        SparseBooleanArray checkedItemPositions = selectedProviderListView.getCheckedItemPositions();
+        for (int i = 0; i < checkedItemPositions.size(); i++) {
+            if (checkedItemPositions.valueAt(i)) {
+                providers.add(((Provider) selectedProviderListView.getItemAtPosition(checkedItemPositions.keyAt(i))));
+            }
+        }
+        return providers;
+    }
+}

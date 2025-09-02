@@ -122,8 +122,8 @@
             android:summary="@string/hint_manage_provider"
             android:title="@string/title_manage_provider">
             <intent
-                android:targetClass="mz.org.csaude.emuzima.view.preferences.ProviderPreferenceActivity"
-                android:targetPackage="com.muzima" />
+                android:targetClass="mz.org.csaude.muzimamobile.view.preferences.ProviderPreferenceActivity"
+                android:targetPackage="mz.org.csaude.muzimamobile" />
         </Preference>
         <ListPreference
             android:defaultValue="@string/no_default_encounter_location"
@@ -136,8 +136,8 @@
             android:summary="@string/hint_manage_location"
             android:title="@string/title_manage_location">
             <intent
-                android:targetClass="mz.org.csaude.emuzima.view.preferences.LocationPreferenceActivity"
-                android:targetPackage="com.muzima" />
+                android:targetClass="mz.org.csaude.muzimamobile.view.preferences.LocationPreferenceActivity"
+                android:targetPackage="mz.org.csaude.muzimamobile" />
         </Preference>
 
     </PreferenceCategory>
@@ -147,8 +147,8 @@
             android:summary="@string/hint_manage_concept"
             android:title="@string/title_manage_concept">
             <intent
-                android:targetClass="mz.org.csaude.emuzima.view.preferences.ConceptPreferenceActivity"
-                android:targetPackage="com.muzima" />
+                android:targetClass="mz.org.csaude.muzimamobile.view.preferences.ConceptPreferenceActivity"
+                android:targetPackage="mz.org.csaude.muzimamobile" />
         </Preference>
 
 </PreferenceScreen>

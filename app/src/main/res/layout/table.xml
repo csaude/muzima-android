@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <mz.org.csaude.emuzima.view.custom.TableFixHeaders
+    <mz.org.csaude.muzimamobile.view.custom.TableFixHeaders
         android:id="@+id/table"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

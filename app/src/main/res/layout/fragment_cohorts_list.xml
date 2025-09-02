@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <mz.org.csaude.emuzima.view.custom.MuzimaRecyclerView
+    <mz.org.csaude.muzimamobile.view.custom.MuzimaRecyclerView
         android:id="@+id/cohorts_list_recycler_view"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"

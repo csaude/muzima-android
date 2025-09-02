@@ -1,0 +1,217 @@
+/*
+ * Copyright (c) The Trustees of Indiana University, Moi University
+ * and Vanderbilt University Medical Center. All Rights Reserved.
+ *
+ * This version of the code is licensed under the MPL 2.0 Open Source license
+ * with additional health care disclaimer.
+ * If the user is an entity intending to commercialize any application that uses
+ * this code in a for-profit venture, please contact the copyright holder.
+ */
+
+package mz.org.csaude.muzimamobile.view.preferences;
+
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.ListView;
+import android.widget.Toast;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import mz.org.csaude.muzimamobile.MuzimaApplication;
+import mz.org.csaude.muzimamobile.R;
+import mz.org.csaude.muzimamobile.adapters.concept.AutoCompleteLocationAdapter;
+import mz.org.csaude.muzimamobile.adapters.concept.SelectedLocationAdapter;
+import com.muzima.api.model.Location;
+import mz.org.csaude.muzimamobile.utils.Constants;
+import mz.org.csaude.muzimamobile.utils.StringUtils;
+import mz.org.csaude.muzimamobile.utils.ThemeUtils;
+import mz.org.csaude.muzimamobile.view.BroadcastListenerActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.appcompat.app.ActionBar;
+
+public class LocationPreferenceActivity extends BroadcastListenerActivity {
+    private SelectedLocationAdapter selectedLocationAdapter;
+    private ListView selectedLocationListView;
+    private AutoCompleteTextView autoCompleteLocationsTextView;
+    private boolean actionModeActive = false;
+    private ActionMode actionMode;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        ThemeUtils.getInstance().onCreate(this,true);
+        super.onCreate(savedInstanceState);
+        setContentView(getContentView());
+
+        LayoutInflater inflator = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflator.inflate(R.layout.location_autocomplete_textview_action, null);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setCustomView(v);
+
+        selectedLocationListView = findViewById(R.id.location_preference_list);
+        final MuzimaApplication applicationContext = (MuzimaApplication) getApplicationContext();
+        selectedLocationAdapter = new SelectedLocationAdapter(this, R.layout.item_location_list,
+                (applicationContext).getLocationController());
+        selectedLocationListView.setAdapter(selectedLocationAdapter);
+        selectedLocationListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        selectedLocationListView.setSelected(true);
+        selectedLocationListView.setClickable(true);
+        selectedLocationListView.setEmptyView(findViewById(R.id.no_location_added));
+        selectedLocationListView.setOnItemClickListener(selectedLocationOnClickListener());
+        autoCompleteLocationsTextView = v.findViewById(R.id.add_location);
+        AutoCompleteLocationAdapter autoCompleteLocationAdapter = new AutoCompleteLocationAdapter(this, R.layout.item_option_autocomplete, autoCompleteLocationsTextView);
+        autoCompleteLocationsTextView.setAdapter(autoCompleteLocationAdapter);
+        autoCompleteLocationsTextView.setOnItemClickListener(autoCompleteOnClickListener());
+
+        // this can happen on orientation change
+        if (actionModeActive) {
+            actionMode = startActionMode(new DeleteLocationsActionModeCallback());
+            actionMode.setTitle(String.valueOf(getSelectedLocations().size()));
+        }
+        logEvent("VIEW_LOCATION_PREFERENCE");
+    }
+
+    private AdapterView.OnItemClickListener selectedLocationOnClickListener() {
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (!actionModeActive) {
+                    actionMode = startActionMode(new DeleteLocationsActionModeCallback());
+                    actionModeActive = true;
+                }
+                int selectedLocationsCount = getSelectedLocations().size();
+                if (selectedLocationsCount == 0 && actionModeActive) {
+                    actionMode.finish();
+                }
+                actionMode.setTitle(String.valueOf(selectedLocationsCount));
+            }
+        };
+    }
+
+    private AdapterView.OnItemClickListener autoCompleteOnClickListener() {
+        return new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+                Location selectedLocation = (Location) parent.getItemAtPosition(position);
+                if (selectedLocationAdapter.doesLocationAlreadyExist(selectedLocation)) {
+                    Log.e(getClass().getSimpleName(), "Locations Already exists");
+                    Toast.makeText(LocationPreferenceActivity.this, "Location " + selectedLocation.getName() + " already exists", Toast.LENGTH_SHORT).show();
+                } else {
+                    selectedLocationAdapter.addLocation(selectedLocation);
+                    selectedLocationAdapter.notifyDataSetChanged();
+                }
+                autoCompleteLocationsTextView.setText(StringUtils.EMPTY);
+            }
+        };
+    }
+
+    protected int getContentView() {
+        return R.layout.activity_location_preference;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionmode_menu_close, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_close:
+                autoCompleteLocationsTextView.setText(StringUtils.EMPTY);
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        selectedLocationAdapter.reloadData();
+    }
+
+    @Override
+    protected void onReceive(Context context, Intent intent){
+           super.onReceive(context, intent);
+
+        int syncStatus = intent.getIntExtra(Constants.DataSyncServiceConstants.SYNC_STATUS, Constants.DataSyncServiceConstants.SyncStatusConstants.UNKNOWN_ERROR);
+        int syncType = intent.getIntExtra(Constants.DataSyncServiceConstants.SYNC_TYPE, -1);
+
+        if (syncType == Constants.DataSyncServiceConstants.SYNC_TEMPLATES) {
+            if (syncStatus == Constants.DataSyncServiceConstants.SyncStatusConstants.SUCCESS) {
+                selectedLocationAdapter.reloadData();
+            }
+        }
+    }
+
+    final class DeleteLocationsActionModeCallback implements ActionMode.Callback {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+            getMenuInflater().inflate(R.menu.actionmode_menu_delete, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.menu_delete:
+                    List<Location> selectedLocations = getSelectedLocations();
+                    selectedLocationAdapter.removeAll(selectedLocations);
+                    onCompleteOfLocationDelete(selectedLocations.size());
+            }
+            return false;
+        }
+
+        private void onCompleteOfLocationDelete(int numberOfDeletedLocations) {
+            endActionMode();
+            selectedLocationListView.clearChoices();
+            selectedLocationAdapter.reloadData();
+            Toast.makeText(getApplicationContext(), getString(R.string.info_location_delete_success, numberOfDeletedLocations), Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode actionMode) {
+            actionModeActive = false;
+            selectedLocationAdapter.clearSelectedLocations();
+        }
+    }
+
+    private void endActionMode() {
+        if (actionMode != null) {
+            actionMode.finish();
+        }
+    }
+
+    private List<Location> getSelectedLocations() {
+        List<Location> locations = new ArrayList<>();
+        SparseBooleanArray checkedItemPositions = selectedLocationListView.getCheckedItemPositions();
+        for (int i = 0; i < checkedItemPositions.size(); i++) {
+            if (checkedItemPositions.valueAt(i)) {
+                locations.add(((Location) selectedLocationListView.getItemAtPosition(checkedItemPositions.keyAt(i))));
+            }
+        }
+        return locations;
+    }
+}
+

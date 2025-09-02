@@ -14,7 +14,7 @@
     <string name="app_name">mUzima</string>
     <string name="drawer_close" translatable="false">Fechar</string>
     <string name="default_auto_save_interval" translatable="false">2</string>
-    <string name="default_server" translatable="false">http://10.10.2.17:8088/openmrschabeco</string>
+    <string name="default_server" translatable="false">https://muzimadev.csaude.org.mz/openmrsmuzima</string>
     <string name="app_sub_title">para provedores de saúde</string>
     <string name="app_title">mUzima para Provedores de Saúde</string>
     <string name="app_version">Versão do aplicativo</string>
