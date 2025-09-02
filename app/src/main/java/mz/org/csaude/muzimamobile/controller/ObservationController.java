@@ -200,8 +200,8 @@ public class ObservationController {
             String paramSignature = buildParamSignature(patientUuids, conceptUuids);
             Date lastSyncTime = lastSyncTimeService.getLastSyncTimeFor(DOWNLOAD_OBSERVATIONS, paramSignature);
             List<Observation> observations = new ArrayList<>();
-            if (hasExactCallBeenMadeBefore(lastSyncTime)) {
-                observations.addAll(observationService.downloadObservationsAndSetupConfig(patientUuids, conceptUuids, lastSyncTime, activeSetupConfigUuid));
+            if (hasExactCallBeenMadeBefore(null)) {
+                observations.addAll(observationService.downloadObservationsAndSetupConfig(patientUuids, conceptUuids, null, activeSetupConfigUuid));
             } else {
                 observations.addAll(observationService.downloadObservationsAndSetupConfig(patientUuids, conceptUuids, null, activeSetupConfigUuid));
             }
